@@ -2,9 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.example.sling.model</groupId>
+    <parent>
+        <groupId>org.example.sling.model</groupId>
+        <artifactId>sling-model-with-params</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <artifactId>integration-tests</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Apache Sling Model with input parameters Integration tests</name>
@@ -24,10 +28,6 @@
      -->
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <sling.java.version>5</sling.java.version>
-
         <!-- Set this to run the server on a specific port
         <http.port></http.port>
          -->
@@ -66,33 +66,19 @@
         <!-- Ignore the MultipleOsgiConsoleTest by default, it slows down tests and that's a somewhat exotic case -->
         <tests.to.ignore>**/**MultipleOsgiConsoleTest.java</tests.to.ignore>
     </properties>
-    
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/sling/trunk/testing/samples/integration-tests</connection>
-        <developerConnection> scm:svn:https://svn.apache.org/repos/asf/sling/trunk/testing/samples/integration-tests</developerConnection>
-        <url>http://svn.apache.org/viewvc/sling/trunk/testing/samples/integration-tests</url>
-    </scm>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
             </plugin>
            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-               <version>2.4.1</version>
                 <configuration>
                     <filesets>
                         <fileset>
                             <directory>${basedir}</directory>
                             <includes>
-                                <!-- sling folder is the workdir of the executable jar that we test -->
                                 <include>sling/**</include>
                             </includes>
                         </fileset>
@@ -100,9 +86,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
                 <executions>
                     <execution>
                         <id>copy-runnable-jar</id>
@@ -118,11 +102,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- 
-                            Consider all dependencies as candidates to be installed
-                            as additional bundles. We use system properties to define
-                            which bundles to install in which order.  
-                        -->
                         <id>copy-additional-bundles</id>
                         <goals>
                             <goal>copy-dependencies</goal>
@@ -139,9 +118,7 @@
             </plugin>
             <plugin>
                 <!-- Find free ports to run our server -->
-                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.8</version>
                 <executions>
                     <execution>
                         <id>reserve-server-port</id>
@@ -160,9 +137,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
                 <configuration>
                     <!-- We run all tests in the integration-tests phase -->
                     <excludes>
@@ -171,9 +146,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.16</version>
                 <executions>
                     <execution>
                         <id>integration-test</id>
@@ -246,53 +219,38 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.junit.core</artifactId>
-            <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.junit.scriptable</artifactId>
-            <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.junit.remote</artifactId>
-            <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.tools</artifactId>
-            <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.servlets.post</artifactId>
-            <version>2.3.4</version>
-            <scope>provided</scope>
         </dependency>
         
         <!-- sling testing tools bundles requires httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-osgi</artifactId>
-            <version>4.1.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore-osgi</artifactId>
-            <version>4.1.2</version>
-            <scope>provided</scope>
         </dependency>
         
         <!-- actual dependencies -->
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.commons.json</artifactId>
-            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
@@ -303,24 +261,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.5.11</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.5.11</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
